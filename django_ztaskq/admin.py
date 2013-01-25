@@ -1,5 +1,5 @@
 from django.contrib import admin
-from zstatusapi.django_ztaskq.models import Task
+from .models import Task
 
 class TaskAdmin(admin.ModelAdmin):
     list_display = ('taskid', 'function_name', 'args', 'kwargs', 'return_value',
