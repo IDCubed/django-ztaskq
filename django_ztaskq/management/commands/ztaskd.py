@@ -4,9 +4,7 @@ import atexit
 from datetime import datetime, timedelta
 from threading import Thread, Lock, Timer
 from pytz import utc
-from zmq import STREAMER, PUSH, PULL
-from zmq.core.device import device
-from zmq.core.error import ZMQError
+from zmq import STREAMER, PUSH, PULL, device, ZMQError
 from django.core.management.base import BaseCommand
 from ...models import Task, Status
 from ...conf import settings, get_logger
