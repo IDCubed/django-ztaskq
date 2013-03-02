@@ -23,3 +23,12 @@ ZTASKD_LOG_MAXBYTES = getattr(settings, 'ZTASKD_LOG_MAXBYTES', 36864)
 
 # how many log files to let rollover
 ZTASKD_LOG_BACKUP = getattr(settings, 'ZTASKD_LOG_BACKUP', 4)
+
+# UserResource to include in Task API, default is a noop
+ZTASKD_API_USER_RESOURCE = getattr(settings, 'ZTASKD_API_USER_RESOURCE',
+                                             'UserResource')
+
+# User dB Model to link to Task model, default is django.contrib.auth.User 
+# NOTE: do not change once the db has been sync'd (relation constraint set)
+ZTASKD_USER_MODEL = getattr(settings, 'ZTASKD_USER_MODEL',
+                                      'auth.User')
