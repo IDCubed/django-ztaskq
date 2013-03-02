@@ -7,8 +7,13 @@ except ImportError:
     from StringIO import StringIO
 from pytz import utc
 from picklefield import PickledObjectField
+
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Model, CharField, TextField, DateTimeField
+from django.db.models.loading import get_model
+from django.db.models import ( Model, CharField, TextField, DateTimeField,
+                               ForeignKey )
+
+from .conf import settings
 
 
 class Status(object):
@@ -32,13 +37,17 @@ _func_cache = {} # could be a classwide "static" member
                  # (may have to override __new__)
 
 
+cls_path = settings.ZTASKD_USER_MODEL
+module, user_cls = cls_path.rsplit('.', 1)
+user_model = get_model(module, user_cls)
+
+
 class Task(Model):
     """The queued task, persisted in the database
     (so it can be polled for status)
     """
 
     taskid = CharField(max_length=36, primary_key=True)
-
     function_name = CharField(max_length=255)
     args = PickledObjectField()
     kwargs = PickledObjectField()
@@ -52,6 +61,9 @@ class Task(Model):
 
     status = CharField(max_length=1, choices=STATUS_CHOICES,
         default=Status.QUEUED)
+
+    user = ForeignKey(user_model, blank=True, null=True,
+        help_text='link this task to a User, totally optional')
 
     class Meta:
         db_table = 'django_ztaskq_task'
