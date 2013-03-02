@@ -126,14 +126,15 @@ class Command(BaseCommand):
 
     def recv_and_enqueue(self):
         try:
-            id, function, args, kwargs, delay = self.server_socket.recv_pyobj()
+            id, func, args, kwargs, delay, user = self.server_socket.recv_pyobj()
             queued = utc.localize(datetime.utcnow() + timedelta(seconds=delay))
             task, was_created = Task.objects.get_or_create(
                 taskid=id,
-                function_name=function,
+                function_name=func,
                 args=args,
                 kwargs=kwargs,
-                queued=queued
+                queued=queued,
+                user=user
             )
             logger.info('Listed task in django database (%r)' % task.pk)
             if was_created:

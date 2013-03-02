@@ -42,7 +42,7 @@ def ztask(memoize=False):
                 taskid = str(uuid.uuid4())
             try:
                 socket.send_pyobj(
-                    (taskid, function_name, args, kwargs, ztaskq_delay)
+                    (taskid, function_name, args, kwargs, ztaskq_delay, user)
                 )
             except Exception: # pylint: disable=W0703
                 logger.error('Failed to submit task to ztaskd: '
